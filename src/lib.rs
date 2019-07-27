@@ -2,7 +2,7 @@
 // Example from https://doc.rust-lang.org/book/ch07-02-defining-modules-to-control-scope-and-privacy.html
 // Expanded to trial Git and GitHub.
 
-// 20190727 1054 PME 10 Application of Git and Git Hub.
+// 20190727 1054 PME 10 Application of Git and Git Hub. Tutorial here: https://rogerdudler.github.io/git-guide/
 // 20190727 1012 PME 00 Learning about modules.
 //
 
