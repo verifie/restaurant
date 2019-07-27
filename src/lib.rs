@@ -26,7 +26,10 @@ mod front_of_house {
     mod hosting {
 
         // Function within a module
-        fn add_to_waitlist() {}
+        // Note, we define a function type when taking in data to a function.
+        fn add_to_waitlist(data_input: &str) {
+            println!("Data in this time is {}", data_input)
+        }
 
         // Function within a module
         fn seat_at_table() {}
@@ -50,10 +53,12 @@ mod front_of_house {
 // This is a public function.  This means it and anything it pulls is seen by public (out of the here).
 pub fn eat_at_restaurant() {
 
+    let data_1 = "eat";
+    let data_2 = "cake";
 
-    // Absolute path - This is alwayus done first.  Note we are calling the function here...
-    crate::front_of_house::hosting::add_to_waitlist();
+    // Absolute path - This is always done first.  Note we are calling the function here...  We don't specify a data type when calling a function.
+    crate::front_of_house::hosting::add_to_waitlist(data_1);
 
     // Relative path - We can do this second, onwards.  Note we are calling the function here...
-    front_of_house::hosting::add_to_waitlist();
+    front_of_house::hosting::add_to_waitlist(data_2);
 }
