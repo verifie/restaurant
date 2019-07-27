@@ -46,3 +46,14 @@ mod front_of_house {
         fn take_payment() {}
     }
 }
+
+// This is a public function.  This means it and anything it pulls is seen by public (out of the here).
+pub fn eat_at_restaurant() {
+
+
+    // Absolute path - This is alwayus done first.  Note we are calling the function here...
+    crate::front_of_house::hosting::add_to_waitlist();
+
+    // Relative path - We can do this second, onwards.  Note we are calling the function here...
+    front_of_house::hosting::add_to_waitlist();
+}
