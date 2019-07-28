@@ -20,8 +20,10 @@
 
 
 
+// ----------------------------------------------------------------------------------------------------
+// verifie_functions
 
-// Verifie's functions.
+// We'll pop our own libraries in here for now.
 pub mod verifie_functions {
 
     // External libraries we use in the following functions.
