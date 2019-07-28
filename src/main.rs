@@ -17,10 +17,33 @@
 // 90  Stable Release   Stable      Beta fixes cycled and a stable version released.
 // 100 Obsolete         Obsolete    Obsolete either through general obsolecense, no longer needed or superceeded by newer version or method.
 
+// ----------------------------------------------------------------------------------------------------
+// Declare the modules in use.
+
+mod lib;
 
 
-
-
+// ----------------------------------------------------------------------------------------------------
+// Main Function.
 fn main() {
-    println!("Hello World!")
+
+    
+    // ------------------------------------------------------------------------------------
+    println!("Hello World!");
+
+    // ------------------------------------------------------------------------------------
+    // Try calling a function in a module.
+    let my_data = "bobby";
+
+    // Try using a function within two levels.  Call with local data.
+    lib::front_of_house::hosting::add_to_waitlist(my_data);
+
+    // Try using a top level function from lib.  Use functions own data.  
+    // Note this calls a module which calls a further function with specified data.
+    lib::eat_at_restaurant();
+
+
+    // Now try a function which in turn calls other private modules in the lib module
+    lib::serve_order(true);
+
 }

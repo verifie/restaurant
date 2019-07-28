@@ -20,7 +20,7 @@
 
 
 // Top module
-mod front_of_house {
+pub mod front_of_house {
 
     // Module within a module. We make this public.
     pub mod hosting {
@@ -60,7 +60,7 @@ pub fn eat_at_restaurant() {
     let data_2 = "cake";
 
     // Absolute path - This is always done first.  Note we are calling the function here...  We don't specify a data type when calling a function.
-    crate::front_of_house::hosting::add_to_waitlist(data_1);
+    //crate::front_of_house::hosting::add_to_waitlist(data_1);
 
     // Relative path - We can do this second, onwards.  Note we are calling the function here...
     front_of_house::hosting::add_to_waitlist(data_2);
@@ -68,15 +68,30 @@ pub fn eat_at_restaurant() {
 
 
 
-fn serve_order() {}
+pub fn serve_order(bool_data: bool) {
+
+    println!("Data send to serve_order : {:?}", bool_data);
+
+
+    println!("Called function - Start");
+    back_of_house::fix_incorrect_order(bool_data);
+    println!("Called function - END");
+}
+
+
 
     mod back_of_house {
-        fn fix_incorrect_order() {
+        pub fn fix_incorrect_order(bool_data: bool) {
 
-            // We're not following the guide here as
-            cook_order(5);
+            if bool_data == true {
 
-            super::serve_order();
+                // We're not following the guide here.
+                cook_order(2);
+    
+            } else {
+                println!("FALSE!!");
+            }
+            //super::serve_order();
         }
 
     fn cook_order(number: i32) {
