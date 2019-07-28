@@ -22,14 +22,19 @@
 
 mod lib;
 
-
+//verifie_functions
 // ----------------------------------------------------------------------------------------------------
 // Main Function.
 fn main() {
 
-    
+    let internet_test_results: bool = lib::verifie_functions::is_internet_on("8.8.8.8");
+    println!(" Result of internet test : {}", internet_test_results);
+
+    let internet_test_results: bool = lib::verifie_functions::is_internet_on("8.8.8.9");
+    println!(" Result of FAIL internet test : {}", internet_test_results);
+
     // ------------------------------------------------------------------------------------
-    println!("Hello World!");
+    println!("\n Hello World!");
 
     // ------------------------------------------------------------------------------------
     // Try calling a function in a module.
@@ -47,3 +52,8 @@ fn main() {
     lib::serve_order(true);
 
 }
+
+
+
+// ----------------------------------------------------------------------------------------------------
+// Support Functions.
