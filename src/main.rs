@@ -27,11 +27,21 @@ mod lib;
 // Main Function.
 fn main() {
 
-    let internet_test_results: bool = lib::verifie_functions::is_internet_on("8.8.8.8");
+
+    // Internet test: try the first module library function created by verifie.
+    let test_ip = "8.8.8.8";
+    let internet_test_results: bool = lib::verifie_functions::is_internet_on(test_ip);
     println!(" Result of internet test : {}", internet_test_results);
 
-    let internet_test_results: bool = lib::verifie_functions::is_internet_on("8.8.8.9");
-    println!(" Result of FAIL internet test : {}", internet_test_results);
+    // Check this works by testing a non-existant IP address.  It should fail.
+    let test_false_ip = "8.8.8.9";
+    let internet_test_results_false: bool = lib::verifie_functions::is_internet_on(test_false_ip);
+    println!(" Result of FALSE internet test : {}", internet_test_results_false);
+
+
+
+
+
 
     // ------------------------------------------------------------------------------------
     println!("\n Hello World!");
