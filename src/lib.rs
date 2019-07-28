@@ -22,12 +22,13 @@
 // Top module
 mod front_of_house {
 
-    // Module within a module
-    mod hosting {
+    // Module within a module. We make this public.
+    pub mod hosting {
 
         // Function within a module
         // Note, we define a function type when taking in data to a function.
-        fn add_to_waitlist(data_input: &str) {
+        // And we make the functions public that need to be accessed from the outside.
+        pub fn add_to_waitlist(data_input: &str) {
             println!("Data in this time is {}", data_input)
         }
 
@@ -50,7 +51,9 @@ mod front_of_house {
     }
 }
 
-// This is a public function.  This means it and anything it pulls is seen by public (out of the here).
+// This is a public function.  This means it and anything it pulls is seen by external code (public) (out of the here).
+// "If you want to make an item like a function or struct private, you put it in a module."
+// Source : https://doc.rust-lang.org/book/ch07-03-paths-for-referring-to-an-item-in-the-module-tree.html
 pub fn eat_at_restaurant() {
 
     let data_1 = "eat";
@@ -61,4 +64,49 @@ pub fn eat_at_restaurant() {
 
     // Relative path - We can do this second, onwards.  Note we are calling the function here...
     front_of_house::hosting::add_to_waitlist(data_2);
+}
+
+
+
+fn serve_order() {}
+
+    mod back_of_house {
+        fn fix_incorrect_order() {
+
+            // We're not following the guide here as
+            cook_order(5);
+
+            super::serve_order();
+        }
+
+    fn cook_order(number: i32) {
+        // TODO ^ Try different values for `number`
+
+        println!("Tell me about {}", number);
+        match number {
+            // Match a single value
+            1 => println!("One!"),
+            // Match several values
+            2 | 3 | 5 | 7 | 11 => println!("This is a prime"),
+            // Match several values
+            20 => println!("This is 20"),
+            // Match an inclusive range
+            13..=19 => println!("A teen"),
+            // Handle the rest of cases
+            _ => println!("Ain't special"),
+        }
+
+        let bob = true;
+        // Match is an expression too
+        let greg = match bob {
+            // The arms of a match must cover all the possible values
+            false => 0,
+            true => 1,
+            // TODO ^ Try commenting out one of these arms
+        };
+
+        println!("{} -> {}", bob, greg);
+
+
+    }
 }
