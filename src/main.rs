@@ -21,6 +21,7 @@
 // Declare the modules in use.
 
 mod lib;
+mod database::rustMysqlInterface;
 
 // ----------------------------------------------------------------------------------------------------
 // Main Function.

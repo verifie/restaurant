@@ -1,5 +1,5 @@
 // src/database/rustMysqlInterface.rs
-// Nased on crate https://docs.rs/mysql/16.0.2/mysql/
+// Based on crate https://docs.rs/mysql/16.0.2/mysql/
 
 // 0.01 00 20190729-1054 PME Creation.
 //
@@ -18,24 +18,11 @@
 
 
 
-// Top module
-pub mod front_of_house {
-
 // ----------------------------------------------------------------------------------------------------
 // verifie_functions
 
 // We'll pop our own libraries in here for now.
-pub mod verifie_functions {
-
-
-    // Module within a module. We make this public.
-    pub mod hosting {
-
-
-
-    // External libraries we use in the following functions.
-    use std::process::Command;
-    use std::str;
+pub mod verifie_database_functions {
 
     pub fn is_internet_on(ping_address: &str) -> bool {
 
@@ -44,22 +31,23 @@ pub mod verifie_functions {
 
         // Print the IP address we intend to test
         if internet_verbose {
-            println!("\n\n Testing to see if the internet is on or off. Using external IP address : {}", ping_address);
+            println!("\n\n Testing to see if the internet is on or off. Pinging external IP address once: {}", ping_address);
         }
 
-        // Ping test command (Windows - not tested on linux.)
-        let show_command = {
+        // Ping test command (Windows - not tested on linux.) Store the text output in
+        let ping_command_utf = {
         Command::new("ping")                                // The principal command, without any arguments...
                 .args(&[ping_address, "-n", "1"])           // Now present the arguments with "arg", as separators.
                 .output()                                   // Return output data.
                 .expect("\n\n Internet test PING command failed to execute. \n\n")      // Notify on error.
         };
 
-
-        // UTF Characters to AlpaNumerics.
+        // Receive the text output from the ping command.
+        
+        Convert UTF Characters to AlpaNumerics.
         // Reference:       https://doc.rust-lang.org/std/str/fn.from_utf8.html
         // Description:     Now use the UTF converter function to reveal the contents of our previous command in human readable form.
-        let utf_result = str::from_utf8(&show_command.stdout).unwrap();
+        let ping_command = str::from_utf8(&ping_command_utf.stdout).unwrap();
 
 
         // Test the resulting text of the ping for "lost = 0".  If this is not found, then one or more packets were lost.
@@ -70,12 +58,12 @@ pub mod verifie_functions {
 
         // And then print the results to the screen.
         if internet_verbose {
-            println!("\nPing results: {} \n", utf_result);
+            println!("\nPing results: {} \n", ping_command);
         } 
 
 
         // Conduct an IF statement test.
-        if utf_result.contains(&search_for_this) {
+        if ping_command.contains(&search_for_this) {
 
             // If it does have the search phrase, the internet is connected, so do this...
             println!("\n The internet is connected.");
@@ -86,15 +74,10 @@ pub mod verifie_functions {
             // Uh oh... no internet. So do this...
             println!("\n WARNING : The internet is NOT connected.");
             return false;
-        };
-
-
-
-        // Now test to see if the word "lost" appears in the resulting string of text (text output from command).
-        // If the word does appear, then packets were lost, amd we have an internet connection failure.
-        //println!("     There are {} {}s in the list.", count_this.iter().filter(|&n| *n == look_for).count(), look_for);
-
+        }
     }
+
+
 }
 
 
