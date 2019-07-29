@@ -8,7 +8,7 @@ edition = "2018"
 
 [dependencies]
 mysql = "*"
-
-[dependencies.mysql]
-version = "*"
+#
+#[dependencies.mysql]
+#version = "*"
 #features = ["ssl"]

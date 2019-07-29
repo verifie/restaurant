@@ -24,6 +24,10 @@
 // We'll pop our own libraries in here for now.
 pub mod verifie_database_functions {
 
+    // External libraries we use in the following functions.
+    use std::process::Command;
+    use std::str;
+    
     pub fn is_internet_on(ping_address: &str) -> bool {
 
         // BUGFIX : Turn on or off.
