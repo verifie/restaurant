@@ -99,6 +99,49 @@ pub mod verifie_functions {
 // DEMO FUNCTIONS - Copied from the web textbook....
 
 
+
+use std::time::Duration;
+use futures::prelude::*;
+
+
+
+// Wait for a duration of x seconds.
+use futures_timer::Delay;
+async fn timers_delay(delay_time) -> Result<(), Box<dyn Error + Send + Sync + 'static>> {
+    
+    let delay_time = 3;
+
+    Delay::new(Duration::from_secs(delay_time))
+        .map(|()| println!("printed after three {} seconds.", delay_time))
+        .await?;
+};
+
+
+// Wait for an interval.
+use futures_timer::Interval;
+async fn timers_interval(interval_time) -> Result<(), Box<dyn Error + Send + Sync + 'static>> {
+
+    let interval_time = 3;
+
+    Interval::new(Duration::from_secs(interval_time))
+        .take(4)
+        .for_each(|()| Ok(println!("printed after {} seconds", interval_time)))
+        .await?;
+};
+
+
+// Wait for a time
+use futures_timer::FutureExt;
+async fn timers_future(future_time) -> Result<(), Box<dyn Error + Send + Sync + 'static>> {
+    
+    let future_time = 3;
+    // create a future that will take at most 3 seconds to resolve
+    let future = future_time;
+      .timeout(Duration::from_secs(3));
+};
+
+
+
 // Top module
 pub mod front_of_house {
 
