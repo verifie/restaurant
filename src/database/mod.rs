@@ -76,56 +76,56 @@ pub mod verifie_database_functions {
     pub fn is_internet_on(ping_address: &str) -> bool {
 
 
-    // Debug Mode:
-    let debug_mode = true;
+        // Debug Mode:
+        let debug_mode = true;
 
-    // Print the IP address we intend to test
-    if debug_mode {
-        println!("\n\n Testing to see if the internet is on or off. Pinging external IP address once: {}", ping_address);
-    }
+        // Print the IP address we intend to test
+        if debug_mode {
+            println!("\n\n Testing to see if the internet is on or off. Pinging external IP address once: {}", ping_address);
+        }
 
-    // Ping test command (Windows - not tested on linux.) Store the text output in
-    let ping_command_utf = {
-    Command::new("ping")                                // The principal command, without any arguments...
-            .args(&[ping_address, "-n", "1"])           // Now present the arguments with "arg", as separators.
-            .output()                                   // Return output data.
-            .expect("\n\n Internet test PING command failed to execute. \n\n")      // Notify on error.
+        // Ping test command (Windows - not tested on linux.) Store the text output in
+        let ping_command_utf = {
+        Command::new("ping")                                // The principal command, without any arguments...
+                .args(&[ping_address, "-n", "1"])           // Now present the arguments with "arg", as separators.
+                .output()                                   // Return output data.
+                .expect("\n\n Internet test PING command failed to execute. \n\n")      // Notify on error.
+        };
+
+        // Receive the text output from the ping command.
+        
+        // Convert UTF Characters to AlpaNumerics.
+        // Reference:       https://doc.rust-lang.org/std/str/fn.from_utf8.html
+        // Description:     Now use the UTF converter function to reveal the contents of our previous command in human readable form.
+        let ping_command = str::from_utf8(&ping_command_utf.stdout).unwrap();
+
+
+        // Test the resulting text of the ping for "lost = 0".  If this is not found, then one or more packets were lost.
+
+        // Set the relevant search term.
+        let search_for_this = "Lost = 0";
+
+
+        // And then print the results to the screen.
+        if debug_mode {
+            println!("\nPing results: {} \n", ping_command);
+        } 
+
+
+        // Conduct an IF statement test.
+        if ping_command.contains(&search_for_this) {
+
+            // If it does have the search phrase, the internet is connected, so do this...
+            println!("\n The internet is connected.");
+            return true;
+
+        } else {
+
+            // Uh oh... no internet. So do this...
+            println!("\n WARNING : The internet is NOT connected.");
+            return false;
+        };
     };
-
-    // Receive the text output from the ping command.
-    
-    // Convert UTF Characters to AlpaNumerics.
-    // Reference:       https://doc.rust-lang.org/std/str/fn.from_utf8.html
-    // Description:     Now use the UTF converter function to reveal the contents of our previous command in human readable form.
-    let ping_command = str::from_utf8(&ping_command_utf.stdout).unwrap();
-
-
-    // Test the resulting text of the ping for "lost = 0".  If this is not found, then one or more packets were lost.
-
-    // Set the relevant search term.
-    let search_for_this = "Lost = 0";
-
-
-    // And then print the results to the screen.
-    if debug_mode {
-        println!("\nPing results: {} \n", ping_command);
-    } 
-
-
-    // Conduct an IF statement test.
-    if ping_command.contains(&search_for_this) {
-
-        // If it does have the search phrase, the internet is connected, so do this...
-        println!("\n The internet is connected.");
-        return true;
-
-    } else {
-
-        // Uh oh... no internet. So do this...
-        println!("\n WARNING : The internet is NOT connected.");
-        return false;
-    };
-}
 
     // ---------------------------------------------------------------------------------------------END
 
@@ -165,22 +165,36 @@ pub mod verifie_database_functions {
         let my_sql_ip =         "localhost";
 
         // MySQL String construct.
-        let my_sql_access_content = ["mysql://", my_sql_username, ":", my_sql_password, ":@", my_sql_ip, ":", my_sql_port, "/mysql"];
+        fn construct_login_string(my_sql_username, my_sql_password, my_sql_port, my_sql_ip) {
 
-        let mut my_sql_access = String::from("\u{22}");             // Start a mutable string, append " to the start.  \u{22}  is "
-        my_sql_access.push_str(&my_sql_access_content.join(""));    // Now add the contents of the array, no separation.
-        my_sql_access.push_str("\u{22}");                           // End the string with "]
+            // Pull the content together
+            let my_sql_access_content = ["mysql://", my_sql_username, ":", my_sql_password, ":@", my_sql_ip, ":", my_sql_port, "/mysql"];
+
+            let mut my_sql_access = String::from("\u{22}");             // Start a mutable string, append " to the start.  \u{22}  is "
+            my_sql_access.push_str(&my_sql_access_content.join(""));    // Now add the contents of the array, no separation.
+            my_sql_access.push_str("\u{22}");                           // End the string with "]
 
 
+            // Debug verbose feedback.
+            if debug_mode {
+                println!("\n My_SQL access string {}", &my_sql_access);
+            }
+        };
 
-        if debug_mode {
-            println!("\n My_SQL access string {}", &my_sql_access);
-        }
 
+        // Connect to database.
         // See docs on the `OptsBuilder`'s methods for the list of options available via URL.
+
+        // Construct login string from the credentials
+        let my_sql_access = construct_login_string(my_sql_username, my_sql_password, my_sql_port, my_sql_ip);
+
+        // Login to MySQL.
         //let connect_to_sql = mysql_database::Pool::new(my_sql_access).unwrap();
 
-        println!("End of connnection attempt. \n\n")
+        // Tempo
+        if debug_mode {
+            println!("End of connnection attempt. \n\n");
+        };
     }
 
     // ---------------------------------------------------------------------------------------------END
