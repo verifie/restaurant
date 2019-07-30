@@ -178,7 +178,7 @@ pub mod verifie_database_functions {
         }
 
         // See docs on the `OptsBuilder`'s methods for the list of options available via URL.
-        let connect_to_sql = mysql_database::Pool::new(my_sql_access).unwrap();
+        //let connect_to_sql = mysql_database::Pool::new(my_sql_access).unwrap();
 
         println!("End of connnection attempt. \n\n")
     }
