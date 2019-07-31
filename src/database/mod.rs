@@ -43,6 +43,7 @@ pub mod verifie_database_functions {
     // SET DEBUG MODE: true / false.
     static DEBUG_MODE : bool = true;
 
+    static MYSQL_SANITIZE_BANNED : array [1,2,3];
 
 
     // External libraries we use in the following functions.
