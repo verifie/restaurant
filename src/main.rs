@@ -23,10 +23,6 @@
 mod lib;
 mod database;
 
-// Load crates
-#[macro_use]
-extern crate mysql;
-
 
 // ----------------------------------------------------------------------------------------------------
 // Main Function.
@@ -57,10 +53,13 @@ fn main() {
 
 
     // Database login
+    // This doesnt seem to work.... we still need to log in prior to each action.
     database::verifie_database_functions::my_sql_logon();
 
     // Do something in the database
-    let my_sql_users = database::verifie_database_functions::my_sql_whos_there();
+    let amount = "160";
+    let payee = "john";
+    let my_sql_users = database::verifie_database_functions::my_sql_insert_payee(amount, payee);
 
 
 

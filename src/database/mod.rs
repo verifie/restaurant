@@ -41,7 +41,7 @@
 pub mod verifie_database_functions {
 
     // SET DEBUG MODE: true / false.
-    static DEBUG_MODE : bool = false;
+    static DEBUG_MODE : bool = true;
 
 
 
@@ -173,8 +173,6 @@ pub mod verifie_database_functions {
             println!("WARNING: Debug Mode : {}", DEBUG_MODE);
         }
 
-        use mysql as mysql_database;
-
         // MySQL Secret passwords and access credentials.
         let my_sql_username =   "root";
         let my_sql_password =   "d4tabasePW";
@@ -242,7 +240,7 @@ pub mod verifie_database_functions {
     fn construct_login_string(my_sql_username: &str, my_sql_password: &str, my_sql_port: &str, my_sql_ip: &str) -> String {
         
         // Pull the access credentials together in one array with supporting formatting.
-        let my_sql_access_content = ["mysql://", my_sql_username, ":", my_sql_password, "@", my_sql_ip, ":", my_sql_port, "/mysql"];
+        let my_sql_access_content = ["mysql://", my_sql_username, ":", my_sql_password, "@", my_sql_ip, ":", my_sql_port, "/verifie"];
 
         // Convert the array to a correctly formatted single string.
         let mut my_sql_access = String::from("");             // Start a mutable string, append " to the start.  \u{22} is " character.
@@ -290,30 +288,68 @@ pub mod verifie_database_functions {
     // TODO : Pull logon credentials from a separate file.   
     //
 
-    pub fn my_sql_whos_there() {
-        mysql_database::Pool::prep_exec(r"
-            SELECT SUBSTRING_INDEX(host, ':', 1) AS host_short,
-            GROUP_CONCAT(DISTINCT user) AS users,
-            COUNT(*) AS threads
-            FROM information_schema.processlist
-            GROUP BY host_short
-            ORDER BY COUNT(*), host_short;
-            ", ()
-            ).unwrap();
+    // pub fn my_sql_show_contents_of_payments() -> String {
+
+    //     let pool = mysql_database::Pool::new("mysql://root:d4tabasePW@localhost:3306/verifie").unwrap();
+
+    //     let return_payments = pool.prep_exec(r"SELECT * FROM payment;", ()).unwrap();
+
+    //     //for row in conn.prep_exec("SELECT * FROM payment;", ()).unwrap() {
+    //     //    let (return_payments) = from_row(row.unwrap());
+    //     //}
+        
+    //     println!("MySQL Data {:?}", return_payments);
+
+    //     // Convert the array to a correctly formatted single string.
+    //     let return_data = return_payments;
+
+    //     return_data
+    // }
+
+
+
+    pub fn my_sql_insert_payee(amount: &str, name: &str) {
+
+        // Sanitize input data.
+        // Look for any non-compliant data. Notably characters and MySQL commands.
+        // Reject entire request if non-compliant data found. Return False.
+
+
+        
+
+        // Log on to database.
+        let pool = mysql_database::Pool::new("mysql://root:d4tabasePW@localhost:3306/verifie").unwrap();
+
+        // Pull the content together in one array with supporting formatting.
+        let my_sql_payee_content = ["INSERT INTO payment (amount, account_name) VALUES (", amount, ", \u{22}", name, "\u{22})"];
+
+        // Convert the array to a correctly formatted single string.
+        let mut my_sql_payee = String::from("");                    // Start a mutable string, append " to the start.  \u{22} is " character.
+        my_sql_payee.push_str(&my_sql_payee_content.join(""));      // Now add the contents of the array, no separation between elements.
+        my_sql_payee.push_str("");                                  // End the string with "]
+
+
+        // Debug : Show MySQL access string as returned from this function.
+        if DEBUG_MODE {
+            println!("\n DEBUG : my_sql_payee = {}", my_sql_payee)
+        }
+
+        // MySQL Command using content as previously formed.
+        pool.prep_exec(my_sql_payee, ()).unwrap();
         
     }
 
-        // Let's create payment table.
-    // It is temporary so we do not need `tmp` database to exist.
-    // Unwap just to make sure no error happened.
-    //pool.prep_exec(r"CREATE TEMPORARY TABLE tmp.payment (
-     //                    customer_id int not null,
-     //                    amount int not null,
-      //                   account_name text
-      //               )", ()).unwrap();
+    pub fn my_sql_create_a_table() {
 
+        let pool = mysql_database::Pool::new("mysql://root:d4tabasePW@localhost:3306/verifie").unwrap();
 
-
+        pool.prep_exec(r"CREATE TABLE payment2 (
+                         customer_id int not null,
+                         amount int not null,
+                         account_name text
+                     )", ()).unwrap();
+        
+    }
 
     // ---------------------------------------------------------------------------------------------END
 
