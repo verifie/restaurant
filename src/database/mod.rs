@@ -397,7 +397,7 @@ pub mod verifie_database_functions {
             // Reject entire request if non-compliant data found. Return False.
 
             
-            
+
             // Else accept input data and proceed as requested.
 
 
@@ -441,6 +441,49 @@ pub mod verifie_database_functions {
 
 
 
+
+
+    // ################################################################################################
+    // sanitize_this
+    // database::verifie_database_functions::sanitize_this
+    //
+    // Public function.
+    // 
+    // Copyright :      Copyright PME 2019.
+    // License :        Not for any use by anyone other than verifie ... for now.
+    // 
+    // Description :    Check users logged into the database.
+    // 
+    // Input :          None.
+    // Output / Action: Returns list of users logged in to MySQL.
+    // 
+    // Status :         10  Non-Functional   Dev         First draft code. Incomplete and likely not to function.
+    // 
+    // Version History :        
+    //                  v1.00 PME 2019/08/01 00:13 - PME Creation.
+    // 
+    // Useful Rust References:
+    //                  .   
+    //
+    // Key notes
+    //                
+    //
+
+    pub fn sanitize_this(unsanitized: &str) {
+
+        // DUMMY LIST
+        let dummy_list = ["bob", "jim", "karen"];
+
+        println!("\n DEBUG : Unsanitized list = {}", unsanitized)
+
+        for x in 0..10 {
+            println!("{}", x); // x: i32
+
+    }
+
+    //MYSQL_SANITIZE_BANNED
+
+        //if ping_command.contains(&search_for_this) {
 
 
 

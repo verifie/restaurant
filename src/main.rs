@@ -62,7 +62,8 @@ fn main() {
     let my_sql_users = database::verifie_database_functions::my_sql_insert_payee(amount, payee);
 
 
-
+    // Developing sanitizer
+    sanitize_this("hello Alex");
 
 
     // ------------------------------------------------------------------------------------
