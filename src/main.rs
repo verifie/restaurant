@@ -56,6 +56,7 @@ fn main() {
     // This doesnt seem to work.... we still need to log in prior to each action.
     database::verifie_database_functions::my_sql_logon();
 
+
     // Do something in the database
     let amount = "160";
     let payee = "john";
