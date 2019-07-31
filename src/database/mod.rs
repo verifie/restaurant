@@ -43,7 +43,80 @@ pub mod verifie_database_functions {
     // SET DEBUG MODE: true / false.
     static DEBUG_MODE : bool = true;
 
-    static MYSQL_SANITIZE_BANNED : array [1,2,3];
+    static MYSQL_SANITIZE_BANNED : &'static [&str] = &[
+        "*",
+        "SELECT",
+        "DISTINCT",
+        "ORDER",
+        "BY",
+        "WHERE",
+        "AND",
+        "OR",
+        "IN",
+        "BETWEEN",
+        "LIKE",
+        "LIMIT",
+        "IS NULL",
+        "Table",
+        "Column",
+        "Aliases",
+        "Joins",
+        "INNER",
+        "JOIN",
+        "LEFT",
+        "RIGHT",
+        "Self",
+        "CROSS",
+        "GROUP",
+        "HAVING",
+        "ROLLUP",
+        "Subquery",
+        "Derived",
+        "EXISTS",
+        "UNION",
+        "MINUS",
+        "INTERSECT",
+        "Update",
+        "INSERT",
+        "IGNORE",
+        "DELETE",
+        "ON",
+        "DELETE",
+        "CASCADE",
+        "REPLACE",
+        "MYSQL",
+        "DATA",
+        "DEFINITION",
+        "Selecting",
+        "CREATE",
+        "DATABASE",
+        "DROP",
+        "Managing",
+        "Storage",
+        "Engines",
+        "Types",
+        "TABLE",
+        "Primary",
+        "Foreign",
+        "UNIQUE",
+        "Constraint",
+        "CHECK",
+        "Emulation",
+        "NOT",
+        "NULL",
+        "ALTER",
+        "ADD",
+        "COLUMN",
+        "DROP",
+        "RENAME",
+        "Temporary",
+        "Tables",
+        "TRUNCATE",
+        "-p",
+        "-u",
+    ];
+
+    //static MYSQL_SANITIZE_BANNED : Vec<String> = vec!["DATA1", "DATA2","DATA3"];
 
 
     // External libraries we use in the following functions.
@@ -315,10 +388,19 @@ pub mod verifie_database_functions {
 
             // Look for any non-compliant data. Notably characters and MySQL commands.
 
+                // Debug : Show MySQL access string as returned from this function.
+                if DEBUG_MODE {
+                    println!("\n DEBUG : MySQL Banned list = {:?}", MYSQL_SANITIZE_BANNED);
+                }
+
+
             // Reject entire request if non-compliant data found. Return False.
 
+            
+            
             // Else accept input data and proceed as requested.
-        
+
+
 
         // Log on to database.
         let pool = mysql_database::Pool::new("mysql://root:d4tabasePW@localhost:3306/verifie").unwrap();
@@ -355,13 +437,6 @@ pub mod verifie_database_functions {
     }
 
     // ---------------------------------------------------------------------------------------------END
-
-
-
-
-
-
-
 
 
 
