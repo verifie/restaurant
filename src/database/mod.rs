@@ -195,7 +195,7 @@ pub mod verifie_database_functions {
 
         let pool = mysql_database::Pool::new(my_sql_access).unwrap();
         
-        //let pool = mysql_database::Pool::new("mysql://root:d4tabasePW@localhost:3307/mysql").unwrap();
+        //let pool = mysql_database::Pool::new("mysql://root:d4tabasePW@localhost:3306/mysql").unwrap();
 
         
 
@@ -262,6 +262,60 @@ pub mod verifie_database_functions {
 
 
 
+
+    // ################################################################################################
+    // my_sql_whos_there
+    // database::verifie_database_functions::my_sql_whos_there
+    //
+    // Public function.
+    // 
+    // Copyright :      Copyright PME 2019.
+    // License :        Not for any use by anyone other than verifie ... for now.
+    // 
+    // Description :    Check users logged into the database.
+    // 
+    // Input :          None.
+    // Output / Action: Returns list of users logged in to MySQL.
+    // 
+    // Status :         10  Non-Functional   Dev         First draft code. Incomplete and likely not to function.
+    // 
+    // Version History :        
+    //                  v1.00 PME 2019/07/31 17:00 - PME Creation.
+    // 
+    // Useful Rust References:
+    //                  Based on crate https://docs.rs/mysql/16.0.2/mysql/    
+    //
+    // Key notes
+    //                
+    // TODO : Pull logon credentials from a separate file.   
+    //
+
+    pub fn my_sql_whos_there() {
+        mysql_database::Pool::prep_exec(r"
+            SELECT SUBSTRING_INDEX(host, ':', 1) AS host_short,
+            GROUP_CONCAT(DISTINCT user) AS users,
+            COUNT(*) AS threads
+            FROM information_schema.processlist
+            GROUP BY host_short
+            ORDER BY COUNT(*), host_short;
+            ", ()
+            ).unwrap();
+        
+    }
+
+        // Let's create payment table.
+    // It is temporary so we do not need `tmp` database to exist.
+    // Unwap just to make sure no error happened.
+    //pool.prep_exec(r"CREATE TEMPORARY TABLE tmp.payment (
+     //                    customer_id int not null,
+     //                    amount int not null,
+      //                   account_name text
+      //               )", ()).unwrap();
+
+
+
+
+    // ---------------------------------------------------------------------------------------------END
 
 
 

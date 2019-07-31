@@ -60,8 +60,7 @@ fn main() {
     database::verifie_database_functions::my_sql_logon();
 
     // Do something in the database
-
-
+    let my_sql_users = database::verifie_database_functions::my_sql_whos_there();
 
 
 
