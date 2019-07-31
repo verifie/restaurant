@@ -32,24 +32,34 @@ extern crate mysql;
 // Main Function.
 fn main() {
 
-    // Debug Mode:
-    let debug_mode = true;
+    // SET GLOBAL DEBUG MODE:
+    // Options: true / false.
+    // NOTE: This variable must be immutable for two reasons.  Firstly to prevent attackers changing the state to read verbose output 
+    // and 2 because the software does not handle an {unsafe} immutable variable.
+    static DEBUG_MODE : bool = false;
+
+
+    // TEST verifie FUNCTION : is_internet_on
 
     // Internet test: try the first module library function created by verifie.
     let test_ip = "8.8.8.8";
     let internet_test_results: bool = database::verifie_database_functions::is_internet_on(test_ip);
-    println!(" Result of internet test : {}", internet_test_results);
+    
+    if DEBUG_MODE {
+        println!(" Result of internet test : {} \n\n", internet_test_results);
+    }
 
     // Check this works by testing a non-existant IP address.  It should fail.
-    let test_false_ip = "8.8.8.9";
-    let internet_test_results_false: bool = database::verifie_database_functions::is_internet_on(test_false_ip);
-    println!(" Result of FALSE internet test : {}", internet_test_results_false);
+    //let test_false_ip = "8.8.8.9";
+    //let internet_test_results_false: bool = database::verifie_database_functions::is_internet_on(test_false_ip);
+    //println!(" Result of FALSE internet test : {}", internet_test_results_false);
 
 
 
-    // Use the database login
+    // Database login
     database::verifie_database_functions::my_sql_logon();
 
+    // Do something in the database
 
 
 
