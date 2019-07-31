@@ -190,7 +190,7 @@ pub mod verifie_database_functions {
 
         // Login to MySQL.
         if DEBUG_MODE {
-            println!("Zn DEBUG: Logging into database with these credentials: {}", my_sql_access);
+            println!("\n DEBUG: Logging into database with these credentials: {}", my_sql_access);
         }
 
         let pool = mysql_database::Pool::new(my_sql_access).unwrap();
