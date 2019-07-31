@@ -311,10 +311,12 @@ pub mod verifie_database_functions {
     pub fn my_sql_insert_payee(amount: &str, name: &str) {
 
         // Sanitize input data.
-        // Look for any non-compliant data. Notably characters and MySQL commands.
-        // Reject entire request if non-compliant data found. Return False.
 
+            // Look for any non-compliant data. Notably characters and MySQL commands.
 
+            // Reject entire request if non-compliant data found. Return False.
+
+            // Else accept input data and proceed as requested.
         
 
         // Log on to database.
