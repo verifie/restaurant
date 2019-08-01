@@ -2,7 +2,8 @@
 // Example from https://doc.rust-lang.org/book/ch07-02-defining-modules-to-control-scope-and-privacy.html
 // Expanded to trial Git and GitHub.
 
-// 20190728 1040 PME 00 Learning about modules.
+// 0.02 201908011218 PME - Learning about database interaction. General code tidy.
+// 0.01 201907281040 PME - Learning about modules.
 //
 
 // Status Codes
@@ -20,13 +21,18 @@
 // ----------------------------------------------------------------------------------------------------
 // Declare the modules in use.
 
-mod lib;
-mod database;
+    mod lib;
+    mod database;
 
 
 // ----------------------------------------------------------------------------------------------------
 // Main Function.
 fn main() {
+
+
+
+
+// 0. Setup / configuration for function.
 
     // SET GLOBAL DEBUG MODE:
     // Options: true / false.
@@ -35,43 +41,17 @@ fn main() {
     static DEBUG_MODE : bool = false;
 
 
-    // TEST verifie FUNCTION : is_internet_on
-
-    // Internet test: try the first module library function created by verifie.
-    let test_ip = "8.8.8.8";
-    let internet_test_results: bool = database::verifie_database_functions::is_internet_on(test_ip);
-    
-    if DEBUG_MODE {
-        println!(" Result of internet test : {} \n\n", internet_test_results);
-    }
-
-    // Check this works by testing a non-existant IP address.  It should fail.
-    //let test_false_ip = "8.8.8.9";
-    //let internet_test_results_false: bool = database::verifie_database_functions::is_internet_on(test_false_ip);
-    //println!(" Result of FALSE internet test : {}", internet_test_results_false);
 
 
+// 1. General experimentation with libraries (modules).
+// ----------------------------------------------------
 
-    // Database login
-    // This doesnt seem to work.... we still need to log in prior to each action.
-    database::verifie_database_functions::my_sql_logon();
+    println!("\n -------------------------------------------------------------------------- ");
 
+    println!("\n 1. General experimentation with libraries (modules).");
 
-    // Do something in the database
-    let amount = "160";
-    let payee = "john";
-    let my_sql_users = database::verifie_database_functions::my_sql_insert_payee(amount, payee);
-
-
-    // Developing sanitizer
-    let sanitize_that = "nothing in here thats non-compliant";
-    let sanitize_result = database::verifie_database_functions::sanitize_this(sanitize_that);
-    println!(" Sanitize Pass? : {}.", sanitize_result);
-
-    // ------------------------------------------------------------------------------------
     println!("\n Hello World!");
 
-    // ------------------------------------------------------------------------------------
     // Try calling a function in a module.
     let my_data = "bobby";
 
@@ -82,9 +62,65 @@ fn main() {
     // Note this calls a module which calls a further function with specified data.
     lib::eat_at_restaurant();
 
-
     // Now try a function which in turn calls other private modules in the lib module
     lib::serve_order(true);
+
+    println!("\n -------------------------------------------------------------------------- ");
+
+
+
+
+// 2. TEST verifie FUNCTION : is_ip_address_reachable.
+// ---------------------------------------------------
+
+    println!("\n 2. TEST verifie FUNCTION : is_ip_address_reachable.");
+
+    // Internet test: try the first module library function created by verifie.
+    let test_ip = "8.8.8.8";
+    let internet_test_results: bool = database::verifie_database_functions::is_ip_address_reachable(test_ip);
+    
+    if DEBUG_MODE {
+        println!(" Result of internet test : {} \n\n", internet_test_results);
+    }
+
+    // Check this works by testing a non-existant IP address.  It should fail. Note, failure results in a long pause!
+    //let test_false_ip = "8.8.8.9";
+    //let internet_test_results_false: bool = database::verifie_database_functions::is_ip_address_reachable(test_false_ip);
+    //println!(" Result of FALSE internet test : {}", internet_test_results_false);
+
+    println!("\n -------------------------------------------------------------------------- ");
+
+
+
+
+// 3. Database interaction.
+// ------------------------
+
+    println!("\n 3. Database interaction.");
+
+
+    // This doesnt seem to work.... we still need to log in prior to each action.
+    database::verifie_database_functions::my_sql_logon();
+
+
+    // Database entry: Enter some data into the table "payment".
+    let payee  = database::verifie_database_functions::get_user_input(" Who is money owed to? ");
+    let amount = database::verifie_database_functions::get_user_input(" How much is owed? ");
+    
+
+    // Database interaction, insert data into MySQL 'payment' table.  The function actions shall first sanitize, then insert the data into 
+    // the database, returning True or false, depending on the outcome of both actions. Alert or action as appropriate.
+    if database::verifie_database_functions::my_sql_insert_payee(&amount, &payee) {
+        println!(" INFO. The database submission was successful.");
+    } else {
+        println!(" WARNING! The database submission FAILED.");
+    };
+
+    
+    println!("\n -------------------------------------------------------------------------- ");
+
+
+
 
 }
 

@@ -37,7 +37,7 @@ pub mod front_of_house {
         // Note, we define a function type when taking in data to a function.
         // And we make the functions public that need to be accessed from the outside.
         pub fn add_to_waitlist(data_input: &str) {
-            println!("Data in this time is {}", data_input)
+            println!(" Data in this time is {}", data_input)
         }
 
         // Function within a module
@@ -78,12 +78,12 @@ pub fn eat_at_restaurant() {
 
 pub fn serve_order(bool_data: bool) {
 
-    println!("Data send to serve_order : {:?}", bool_data);
+    println!(" Data send to serve_order : {:?}", bool_data);
 
 
-    println!("Called function - Start");
+    println!(" Called function - Start");
     back_of_house::fix_incorrect_order(bool_data);
-    println!("Called function - END");
+    println!(" Called function - END");
 }
 
 
@@ -105,18 +105,18 @@ pub fn serve_order(bool_data: bool) {
     fn cook_order(number: i32) {
         // TODO ^ Try different values for `number`
 
-        println!("Tell me about {}", number);
+        println!(" Tell me about {}", number);
         match number {
             // Match a single value
-            1 => println!("One!"),
+            1 => println!(" One!"),
             // Match several values
-            2 | 3 | 5 | 7 | 11 => println!("This is a prime"),
+            2 | 3 | 5 | 7 | 11 => println!(" This is a prime"),
             // Match several values
-            20 => println!("This is 20"),
+            20 => println!(" This is 20"),
             // Match an inclusive range
-            13..=19 => println!("A teen"),
+            13..=19 => println!(" A teen"),
             // Handle the rest of cases
-            _ => println!("Ain't special"),
+            _ => println!(" Ain't special"),
         }
 
         let bob = true;
@@ -128,7 +128,7 @@ pub fn serve_order(bool_data: bool) {
             // TODO ^ Try commenting out one of these arms
         };
 
-        println!("{} -> {}", bob, greg);
+        println!(" {} -> {}", bob, greg);
 
 
     }
