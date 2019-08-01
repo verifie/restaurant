@@ -41,7 +41,7 @@
 pub mod verifie_database_functions {
 
     // SET DEBUG MODE: true / false.
-    static DEBUG_MODE : bool = true;
+    static DEBUG_MODE : bool = false;
 
     static MYSQL_SANITIZE_BANNED : &'static [&str] = &[
         "*",
@@ -52,7 +52,7 @@ pub mod verifie_database_functions {
         "WHERE",
         "AND",
         "OR",
-        "IN",
+        //"IN",
         "BETWEEN",
         "LIKE",
         "LIMIT",
@@ -73,6 +73,7 @@ pub mod verifie_database_functions {
         "Subquery",
         "Derived",
         "EXISTS",
+        "SHOW",
         "UNION",
         "MINUS",
         "INTERSECT",
@@ -469,15 +470,38 @@ pub mod verifie_database_functions {
     //                
     //
 
-    pub fn sanitize_this(unsanitized: &str) {
+    pub fn sanitize_this(unsanitized: &str) -> bool {
 
         // DUMMY LIST
-        let dummy_list = ["bob", "jim", "karen"];
 
-        println!("\n DEBUG : Unsanitized list = {}", unsanitized)
+        println!("\n DEBUG : Unsanitized list = {}", unsanitized);
 
-        for x in 0..10 {
-            println!("{}", x); // x: i32
+        // Setup a variable to count illegal words found.
+        let mut illegal_words_found = 0;
+
+        for illegal_word in MYSQL_SANITIZE_BANNED.iter() {
+
+            
+            //println!("Checking word: {}", &illegal_word);
+            if unsanitized.contains(illegal_word) {
+                illegal_words_found = illegal_words_found + 1;
+                // DEBUG How many words did we find?
+                println!("Non-compliant words found: {}", illegal_word);
+            }
+        }
+
+
+        // If we find any illegal words, return false (as in non-compliant).
+        if illegal_words_found >= 1 {
+            println!("Non-compliant words found: {:?}", illegal_words_found);
+            return false;
+
+        // If we reach here, no illegal words were found. Return true (as passed sanitize checks).
+        } else {
+            return true;
+        }
+        
+
 
     }
 

@@ -64,8 +64,9 @@ fn main() {
 
 
     // Developing sanitizer
-    sanitize_this("hello Alex");
-
+    let sanitize_that = "nothing in here thats non-compliant";
+    let sanitize_result = database::verifie_database_functions::sanitize_this(sanitize_that);
+    println!(" Sanitize Pass? : {}.", sanitize_result);
 
     // ------------------------------------------------------------------------------------
     println!("\n Hello World!");
@@ -91,3 +92,5 @@ fn main() {
 
 // ----------------------------------------------------------------------------------------------------
 // Support Functions.
+
+
