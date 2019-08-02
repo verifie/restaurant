@@ -63,9 +63,10 @@ pub mod verifie_database_functions {
     use std::str;                       //
     use mysql as mysql_database;        //
     use std::io;                        // get_user_input , 
-
-
-    
+    extern crate serde_json;
+    use serde_json::{Result, Value};
+    use serde::{Deserialize, Serialize};
+    use serde_json::json;
 
     // ################################################################################################
     // is_ip_address_reachable
@@ -491,6 +492,185 @@ pub mod verifie_database_functions {
         
     }
 
+    // ---------------------------------------------------------------------------------------------END
+
+
+
+
+
+
+
+
+    // ################################################################################################
+    // sanitize_this
+    // database::verifie_database_functions::sanitize_this
+    //
+    // Public function.
+    // 
+    // Copyright :      Copyright PME 2019.
+    // License :        Not for any use by anyone other than verifie ... for now.
+    // 
+    // Description :    Check users logged into the database.
+    // 
+    // Input :          MySQL input data to sanitize check.
+    // Output / Action: Returns a boolean; true for compliant, false for non-compliant (and likely dangerous).
+    // 
+    // Status :         40  Dev Tested       Dev         Coder has run some exception testing. pre-release Quality. No peer testing.
+    // 
+    // Version History :        
+    //                  v1.00 PME 2019/08/01 09:48 - PME Commented and completed.
+    //                  v0.01 PME 2019/08/01 00:13 - PME Creation.
+    // 
+    // Useful Rust References:
+    //                  .   
+    //
+    // Key notes
+    //                
+    //
+
+    pub fn my_sql_read_table_payments() {
+
+        
+
+        //-> String 
+        // DEBUG : Show unsanitized word, then show the banned word list.
+        if DEBUG_MODE {
+            println!("\n DEBUG : fn my_sql_read_table_payments()");
+            println!("\n DEBUG : -------------------------------");
+        }
+
+        // Log on to database.
+        let mut pool = mysql_database::Pool::new("mysql://root:d4tabasePW@localhost:3306/verifie").unwrap();
+
+
+
+        // Read data from table.
+        //for row in pool.prep_exec("SELECT \u{2a} from payment").unwrap() {
+        //    let (a, b, c) = from_row(row.unwrap());
+            //println!("\n a : {:?}. \n b : {:?}. \n c : {:?}", a, b, c);
+
+        //}
+
+
+
+
+
+
+        // Create structure to house data.
+        #[derive(Debug)]
+        struct User {
+            customer_id: i32,
+            amount: i32,
+            account_name: Option<String>
+        };
+
+
+
+
+
+        // Let's select payments from database
+
+        // PME users formatted as defined vector structure 'User' = results from query.
+        let users: Vec<User> = pool.prep_exec("SELECT customer_id, amount, account_name from payment", {
+                for &(column, value) in pairs.iter() {
+                    println!("{} = {}", column, value.unwrap());
+                }
+                true
+            })
+            .unwrap();
+
+
+
+        // PME Now implicitly map the result data to the structure.
+
+        .map(|result| { // In this closure we will map `QueryResult` to `Vec<Payment>`
+            // `QueryResult` is iterator over `MyResult<row, err>` so first call to `map`
+            // will map each `MyResult` to contained `row` (no proper error handling)
+            // and second call to `map` will map each `row` to `Payment`
+
+            result.map(|x| x.unwrap()).map(|row| {
+
+                // ⚠️ Note that from_row will panic if you don't follow your schema
+                // PME let these fields - the result mysql data from each row.
+                let (customer_id, amount, account_name) = mysql::from_row(row);
+
+                //Format as follows:
+                User {
+                    customer_id: customer_id,
+                    amount: amount,
+                    account_name: account_name,
+                }
+                
+            }).collect() // Collect payments so now MySQL `QueryResult` is mapped to `Vec<Payment>`
+
+        }).unwrap(); // Unwrap `Vec<Payment>`     <- PME assumes this simply handles errors???
+
+
+
+
+
+
+
+        println!("\n Database download {:#?}", &users);
+
+        // Access a specific row.
+        println!("\n\n Data 0 {:#?} at the number ", users[0]);
+
+
+
+        //.iterate("SELECT * FROM users WHERE age > 50", |pairs| {
+        //        for &(column, value) in pairs.iter() {
+        //            println!("{} = {}", column, value.unwrap());
+        //        }
+        //        true
+        //     })
+        //    .unwrap();
+
+
+
+        // Why doesnt this zdfhgnv WORK?
+        let userd = User{customer_id: "customer_id".to_string(), amount: "amount".to_string(), account_name: "account_name".to_string()};
+
+        let json_data = serde_json::to_string(&userd).unwrap();
+        println!("json data {}", json_data);
+
+
+
+
+
+
+
+
+
+
+
+        // PME query: To access fields, we need to convert to JSON??
+
+        let one_selection = &users[0];
+        
+        // This works, we can pull a row but not content....
+        println!(" \n one_selection: {:?} ..", one_selection);
+        // This fails on the usize error.........
+        //println!(" \n one element of one_selection: {:?} ..", one_selection["customer_id"]);
+
+
+        //for x in &one_selection {
+        //    println!("{:#?}", x);
+        //}
+
+
+        // Trying example from https://stackoverflow.com/questions/35208615/how-to-select-querys-result-to-json-in-rust-and-nickel
+        //let json_obj = serde_json::from_str(&users).unwrap();
+
+        //println!(" \n one_selection: {:?} ..",json_obj);
+
+
+        // Access parts of the data by indexing with square brackets.
+        //println!("\n\n Please call {:#?} at the number {:#?}", users["customer_id"], users["account_name"][0]);
+
+        
+
+    }
     // ---------------------------------------------------------------------------------------------END
 
 
