@@ -565,21 +565,10 @@ pub mod verifie_database_functions {
         };
 
 
-
-
-
         // Let's select payments from database
 
         // PME users formatted as defined vector structure 'User' = results from query.
         let users: Vec<User> = pool.prep_exec("SELECT customer_id, amount, account_name from payment", {
-                for &(column, value) in pairs.iter() {
-                    println!("{} = {}", column, value.unwrap());
-                }
-                true
-            })
-            .unwrap();
-
-
 
         // PME Now implicitly map the result data to the structure.
 
@@ -608,9 +597,6 @@ pub mod verifie_database_functions {
 
 
 
-
-
-
         println!("\n Database download {:#?}", &users);
 
         // Access a specific row.
@@ -629,17 +615,10 @@ pub mod verifie_database_functions {
 
 
         // Why doesnt this zdfhgnv WORK?
-        let userd = User{customer_id: "customer_id".to_string(), amount: "amount".to_string(), account_name: "account_name".to_string()};
+        //let userd = User{customer_id: "customer_id".to_string(), amount: "amount".to_string(), account_name: "account_name".to_string()};
 
         let json_data = serde_json::to_string(&userd).unwrap();
         println!("json data {}", json_data);
-
-
-
-
-
-
-
 
 
 
@@ -650,6 +629,9 @@ pub mod verifie_database_functions {
         
         // This works, we can pull a row but not content....
         println!(" \n one_selection: {:?} ..", one_selection);
+
+
+
         // This fails on the usize error.........
         //println!(" \n one element of one_selection: {:?} ..", one_selection["customer_id"]);
 
@@ -670,7 +652,6 @@ pub mod verifie_database_functions {
 
         
 
-    }
     // ---------------------------------------------------------------------------------------------END
 
 
