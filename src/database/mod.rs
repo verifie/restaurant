@@ -63,10 +63,9 @@ pub mod verifie_database_functions {
     use std::str;                       //
     use mysql as mysql_database;        //
     use std::io;                        // get_user_input , 
-    extern crate serde_json;
-    use serde_json::{Result, Value};
-    use serde::{Deserialize, Serialize};
-    use serde_json::json;
+
+
+    
 
     // ################################################################################################
     // is_ip_address_reachable
@@ -499,6 +498,7 @@ pub mod verifie_database_functions {
 
 
 
+<<<<<<< HEAD
 
 
     // ################################################################################################
@@ -659,6 +659,8 @@ pub mod verifie_database_functions {
 
 
 
+=======
+>>>>>>> parent of 2b0a338... Trying to badly interpret MySQL output
     // ################################################################################################
     // sanitize_this
     // database::verifie_database_functions::sanitize_this

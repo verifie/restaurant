@@ -98,13 +98,16 @@ fn main() {
 
     println!("\n 3. Database interaction.");
 
+
     // This doesnt seem to work.... we still need to log in prior to each action.
     database::verifie_database_functions::my_sql_logon();
+
 
     // Database entry: Enter some data into the table "payment".
     let payee  = database::verifie_database_functions::get_user_input(" Who is money owed to? ");
     let amount = database::verifie_database_functions::get_user_input(" How much is owed? ");
     
+
     // Database interaction, insert data into MySQL 'payment' table.  The function actions shall first sanitize, then insert the data into 
     // the database, returning True or false, depending on the outcome of both actions. Alert or action as appropriate.
     if database::verifie_database_functions::my_sql_insert_payee(&amount, &payee) {
@@ -112,10 +115,6 @@ fn main() {
     } else {
         println!(" WARNING! The database submission FAILED.");
     };
-
-    // Now read the data back out of the database.
-    let database_readout = database::verifie_database_functions::my_sql_read_table_payments();
-
 
     
     println!("\n -------------------------------------------------------------------------- ");
