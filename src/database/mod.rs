@@ -498,7 +498,6 @@ pub mod verifie_database_functions {
 
 
 
-<<<<<<< HEAD
 
 
     // ################################################################################################
@@ -540,7 +539,7 @@ pub mod verifie_database_functions {
         }
 
         // Log on to database.
-        let mut pool = mysql_database::Pool::new("mysql://root:d4tabasePW@localhost:3306/verifie").unwrap();
+        let pool = mysql_database::Pool::new("mysql://root:d4tabasePW@localhost:3306/verifie").unwrap();
 
 
 
@@ -558,7 +557,7 @@ pub mod verifie_database_functions {
 
         // Create structure to house data.
         #[derive(Debug)]
-        struct User {
+        struct Payment {
             customer_id: i32,
             amount: i32,
             account_name: Option<String>
@@ -568,39 +567,29 @@ pub mod verifie_database_functions {
         // Let's select payments from database
 
         // PME users formatted as defined vector structure 'User' = results from query.
-        let users: Vec<User> = pool.prep_exec("SELECT customer_id, amount, account_name from payment", {
+        let users: Vec<Payment> = pool.prep_exec("SELECT customer_id, amount, account_name from payment", ())
 
-        // PME Now implicitly map the result data to the structure.
-
-        .map(|result| { // In this closure we will map `QueryResult` to `Vec<Payment>`
-            // `QueryResult` is iterator over `MyResult<row, err>` so first call to `map`
-            // will map each `MyResult` to contained `row` (no proper error handling)
-            // and second call to `map` will map each `row` to `Payment`
-
-            result.map(|x| x.unwrap()).map(|row| {
-
-                // ⚠️ Note that from_row will panic if you don't follow your schema
-                // PME let these fields - the result mysql data from each row.
-                let (customer_id, amount, account_name) = mysql::from_row(row);
-
-                //Format as follows:
-                User {
-                    customer_id: customer_id,
-                    amount: amount,
-                    account_name: account_name,
-                }
-                
-            }).collect() // Collect payments so now MySQL `QueryResult` is mapped to `Vec<Payment>`
-
-        }).unwrap(); // Unwrap `Vec<Payment>`     <- PME assumes this simply handles errors???
+                .map(|result| { // In this closure we will map `QueryResult` to `Vec<Payment>`
+                    // `QueryResult` is iterator over `MyResult<row, err>` so first call to `map`
+                    // will map each `MyResult` to contained `row` (no proper error handling)
+                    // and second call to `map` will map each `row` to `Payment`
+                    result.map(|x| x.unwrap()).map(|row| {
+                        // ⚠️ Note that from_row will panic if you don't follow your schema
+                        let (customer_id, amount, account_name) = mysql::from_row(row);
+                        Payment {
+                            customer_id: customer_id,
+                            amount: amount,
+                            account_name: account_name,
+                        }
+                    }).collect() // Collect payments so now `QueryResult` is mapped to `Vec<Payment>`
+                }).unwrap(); // Unwrap `Vec<Payment>`
 
 
 
+            println!("\n Database download {:#?}", &users);
 
-        println!("\n Database download {:#?}", &users);
-
-        // Access a specific row.
-        println!("\n\n Data 0 {:#?} at the number ", users[0]);
+            // Access a specific row.
+            println!("\n\n Data 0 {:#?} at the number ", users[0]);
 
 
 
@@ -617,8 +606,8 @@ pub mod verifie_database_functions {
         // Why doesnt this zdfhgnv WORK?
         //let userd = User{customer_id: "customer_id".to_string(), amount: "amount".to_string(), account_name: "account_name".to_string()};
 
-        let json_data = serde_json::to_string(&userd).unwrap();
-        println!("json data {}", json_data);
+        //let json_data = serde_json::to_string(&userd).unwrap();
+        //println!("json data {}", json_data);
 
 
 
@@ -628,7 +617,70 @@ pub mod verifie_database_functions {
         let one_selection = &users[0];
         
         // This works, we can pull a row but not content....
-        println!(" \n one_selection: {:?} ..", one_selection);
+        println!(" \n\n one_selection: {:?} ..", one_selection);
+
+
+        // Print an item from the list.
+        let choosen_item = 9;
+        println!(" \n\n Item row [{}] from the list contains: ** {:?} **", choosen_item, &users[choosen_item]);
+
+
+
+        // This count works only in the sense it loops for each item found, but it presents the each row in full as count...
+        for count in &users {
+            // Print an item from the list.
+            println!(" \n\n Item ** {:#?} **", count.amount);
+        }
+
+
+
+        ///////////////
+        // Pull one entry:
+
+
+        for data in &users {
+            // Print an item from the list.
+            println!(" \n\n Customer : {:?} \n With ID : {:#?} \n Amount Owed : £{:#?},", data.account_name.as_ref().unwrap().replace("\r\n\u{22}", ""), data.customer_id, data.amount);
+        }
+
+
+
+        ///////////////
+        // Pull one entry:
+
+        // Print an item from the list.
+        let chosen_item = 12;
+        println!(" \n\n Item row [{}] from the list contains: ** {:?} **", chosen_item, &users[chosen_item]);
+
+        // Print an item from the list.
+        let chosen_item = 9;
+        println!(" \n\n Item row [{}] from the list contains: ** {:?} **", chosen_item, &users[chosen_item]);
+
+
+
+
+
+
+
+
+
+        // How to unwrap the data within Some field, as interpreted from database.
+        //let msg = Some("howdy");
+        //println!(" before unwrap : {:?}", msg);
+        // Take a reference to the contained string
+        //if let Some(ref m) = msg {
+        //    println!("{}", *m);
+        //}
+
+        // Remove the contained string, destroying the Option
+        //let unwrapped_msg = msg.unwrap_or("default message");
+        //
+        //println!("unwrapped msg : {}", unwrapped_msg)
+        //
+        // Alternative version
+        //let default_message: String = "No Data or failed to read data.".to_string();
+        //let name_of_account_holder = from_this_data.account_name.as_ref().unwrap();
+
 
 
 
@@ -651,7 +703,7 @@ pub mod verifie_database_functions {
         //println!("\n\n Please call {:#?} at the number {:#?}", users["customer_id"], users["account_name"][0]);
 
         
-
+    }
     // ---------------------------------------------------------------------------------------------END
 
 
@@ -659,8 +711,6 @@ pub mod verifie_database_functions {
 
 
 
-=======
->>>>>>> parent of 2b0a338... Trying to badly interpret MySQL output
     // ################################################################################################
     // sanitize_this
     // database::verifie_database_functions::sanitize_this

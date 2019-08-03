@@ -116,6 +116,7 @@ fn main() {
         println!(" WARNING! The database submission FAILED.");
     };
 
+    database::verifie_database_functions::my_sql_read_table_payments();
     
     println!("\n -------------------------------------------------------------------------- ");
 
