@@ -634,16 +634,6 @@ pub mod verifie_database_functions {
 
 
 
-        ///////////////
-        // Pull one entry:
-
-
-        for data in &users {
-            // Print an item from the list.
-            println!(" \n\n Customer : {:?} \n With ID : {:#?} \n Amount Owed : £{:#?},", data.account_name.as_ref().unwrap().replace("\r\n\u{22}", ""), data.customer_id, data.amount);
-        }
-
-
 
         ///////////////
         // Pull one entry:
@@ -652,14 +642,41 @@ pub mod verifie_database_functions {
         let chosen_item = 12;
         println!(" \n\n Item row [{}] from the list contains: ** {:?} **", chosen_item, &users[chosen_item]);
 
-        // Print an item from the list.
-        let chosen_item = 9;
-        println!(" \n\n Item row [{}] from the list contains: ** {:?} **", chosen_item, &users[chosen_item]);
 
 
 
+        ///////////////
+        // Pull all entries:
 
 
+        for data in &users {
+            // Print an item from the list.
+            println!(" \n\n ID           : {:#?}. \n Customer     : {}. \n Amount Owed  : £{:#?}.", data.customer_id, data.account_name.as_ref().unwrap().replace("\r\n", ""), data.amount);
+        }
+
+
+        ///////////////
+        // Pull all entries:
+
+
+
+        let chosen_entry = 42;
+        for data in &users(42, 42) {
+            // Print an item from the list.
+            println!(" \n Choose an entry based on row id.");
+            println!(" \n\n ID           : {:#?}. \n Customer     : {}. \n Amount Owed  : £{:#?}.", data.customer_id, data.account_name.as_ref().unwrap().replace("\r\n", ""), data.amount);
+        }
+
+
+        //fn select_customer_data(entry_id: i32) -> String {
+         //   let data = users[entry_id];
+         //   let selected_data = (" \n\n ID           : {:#?}. \n Customer     : {}. \n Amount Owed  : £{:#?}.", data.customer_id, data.account_name.as_ref().unwrap().replace("\r\n", ""), data.amount);
+          //  selected_data
+        //};
+
+        //let chosen_entry = 42;
+        //let chosen_data = select_customer_data(chosen_entry);
+        //println!("Chosen data: \n {}", chosen_data);
 
 
 
