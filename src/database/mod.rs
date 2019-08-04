@@ -661,11 +661,16 @@ pub mod verifie_database_functions {
 
 
         let chosen_entry = 42;
-        for data in &users(42, 42) {
-            // Print an item from the list.
-            println!(" \n Choose an entry based on row id.");
-            println!(" \n\n ID           : {:#?}. \n Customer     : {}. \n Amount Owed  : £{:#?}.", data.customer_id, data.account_name.as_ref().unwrap().replace("\r\n", ""), data.amount);
-        }
+        // Print an item from the list.
+        println!(" \n Choose an entry based on row id.");
+        println!(" \n\n ID           : {:#?}. \n Customer     : {}. \n Amount Owed  : £{:#?}.", 
+                        &users[chosen_entry].customer_id,
+                        &users[chosen_entry].account_name
+                            .as_ref()
+                            .unwrap()
+                            .replace("\r\n", ""), 
+                        &users[chosen_entry].amount);
+
 
 
         //fn select_customer_data(entry_id: i32) -> String {
