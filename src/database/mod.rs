@@ -660,9 +660,9 @@ pub mod verifie_database_functions {
         // Select payments table from database
 
         // Construct a MySQL command for this function.
-        let mut my_sql_command = String::from("\u{22} SELECT customer_id, amount, account_name FROM payment WHERE account_name = \u{22}");
+        let mut my_sql_command = String::from("\u{22} SELECT customer_id, amount, account_name FROM payment WHERE account_name = '");
         my_sql_command.push_str(&_customer_name);
-        my_sql_command.push_str("\u{22}");                                  // End the string with "]
+        my_sql_command.push_str("'\u{22}");                                  // End the string with "]
 
         // Debug print MySQL string.
         println!(" \n MySQL command: ** {} **", my_sql_command);
