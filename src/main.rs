@@ -100,7 +100,7 @@ fn main() {
 
 
     // This doesnt seem to work.... we still need to log in prior to each action.
-    database::verifie_database_functions::my_sql_logon();
+    //database::verifie_database_functions::my_sql_logon();
 
 
     // Database entry: Enter some data into the table "payment".
@@ -116,7 +116,14 @@ fn main() {
         println!(" WARNING! The database submission FAILED.");
     };
 
-    database::verifie_database_functions::my_sql_read_table_payments();
+    let find_this = "cake";
+    database::verifie_database_functions::my_sql_payments_account(find_this);
+
+
+    let _amount = 50;
+    database::verifie_database_functions::my_sql_payments_due_report_value(_amount, true);
+
+
     
     println!("\n -------------------------------------------------------------------------- ");
 

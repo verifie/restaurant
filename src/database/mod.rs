@@ -65,7 +65,6 @@ pub mod verifie_database_functions {
     use std::io;                        // get_user_input , 
 
 
-    
 
     // ################################################################################################
     // is_ip_address_reachable
@@ -225,18 +224,19 @@ pub mod verifie_database_functions {
     // TODO : Pull logon credentials from a separate file.   
     //
 
-    pub fn my_sql_logon() {
+    fn my_sql_logon() {
             
         // If debug mode is on, announce.
         if DEBUG_MODE {
+            println!("DEBUG fn my_sql_logon() -> String");
             println!("WARNING: Debug Mode : {}", DEBUG_MODE);
         }
 
         // MySQL Secret passwords and access credentials.
         let my_sql_username =   "root";
         let my_sql_password =   "d4tabasePW";
-        let my_sql_port =       "3306";
-        let my_sql_ip =         "localhost";
+        let my_sql_port     =   "3306";
+        let my_sql_ip       =   "localhost";
 
 
         // Connect to database.
@@ -250,17 +250,18 @@ pub mod verifie_database_functions {
             println!("\n DEBUG: Logging into database with these credentials: {}", my_sql_access);
         }
 
-        let pool = mysql_database::Pool::new(my_sql_access).unwrap();
+        let logon_script = mysql_database::Pool::new(my_sql_access).unwrap();
         
         //let pool = mysql_database::Pool::new("mysql://root:d4tabasePW@localhost:3306/mysql").unwrap();
 
-        
 
         // Debug Mode:
         if DEBUG_MODE {
             println!("\n DEBUG: End of connnection attempt. \n");
         };
 
+
+        //logon_script
 
     }
     // ---------------------------------------------------------------------------------------------END
@@ -501,8 +502,8 @@ pub mod verifie_database_functions {
 
 
     // ################################################################################################
-    // sanitize_this
-    // database::verifie_database_functions::sanitize_this
+    // my_sql_read_table_payments()
+    // database::verifie_database_functions::my_sql_read_table_payments()
     //
     // Public function.
     // 
@@ -529,30 +530,14 @@ pub mod verifie_database_functions {
 
     pub fn my_sql_read_table_payments() {
 
-        
-
-        //-> String 
-        // DEBUG : Show unsanitized word, then show the banned word list.
         if DEBUG_MODE {
             println!("\n DEBUG : fn my_sql_read_table_payments()");
             println!("\n DEBUG : -------------------------------");
         }
 
+
         // Log on to database.
         let pool = mysql_database::Pool::new("mysql://root:d4tabasePW@localhost:3306/verifie").unwrap();
-
-
-
-        // Read data from table.
-        //for row in pool.prep_exec("SELECT \u{2a} from payment").unwrap() {
-        //    let (a, b, c) = from_row(row.unwrap());
-            //println!("\n a : {:?}. \n b : {:?}. \n c : {:?}", a, b, c);
-
-        //}
-
-
-
-
 
 
         // Create structure to house data.
@@ -564,7 +549,7 @@ pub mod verifie_database_functions {
         };
 
 
-        // Let's select payments from database
+        // Select payments table from database
 
         // PME users formatted as defined vector structure 'User' = results from query.
         let users: Vec<Payment> = pool.prep_exec("SELECT customer_id, amount, account_name from payment", ())
@@ -592,7 +577,7 @@ pub mod verifie_database_functions {
             println!("\n\n Data 0 {:#?} at the number ", users[0]);
 
 
-
+        // Select amount values over figure x
         //.iterate("SELECT * FROM users WHERE age > 50", |pairs| {
         //        for &(column, value) in pairs.iter() {
         //            println!("{} = {}", column, value.unwrap());
@@ -602,28 +587,9 @@ pub mod verifie_database_functions {
         //    .unwrap();
 
 
-
-        // Why doesnt this zdfhgnv WORK?
-        //let userd = User{customer_id: "customer_id".to_string(), amount: "amount".to_string(), account_name: "account_name".to_string()};
-
-        //let json_data = serde_json::to_string(&userd).unwrap();
-        //println!("json data {}", json_data);
-
-
-
-
-        // PME query: To access fields, we need to convert to JSON??
-
-        let one_selection = &users[0];
-        
-        // This works, we can pull a row but not content....
-        println!(" \n\n one_selection: {:?} ..", one_selection);
-
-
-        // Print an item from the list.
+        // Print an item from the list. Not unwrapped.
         let choosen_item = 9;
         println!(" \n\n Item row [{}] from the list contains: ** {:?} **", choosen_item, &users[choosen_item]);
-
 
 
         // This count works only in the sense it loops for each item found, but it presents the each row in full as count...
@@ -634,21 +600,8 @@ pub mod verifie_database_functions {
 
 
 
-
-        ///////////////
-        // Pull one entry:
-
-        // Print an item from the list.
-        let chosen_item = 12;
-        println!(" \n\n Item row [{}] from the list contains: ** {:?} **", chosen_item, &users[chosen_item]);
-
-
-
-
         ///////////////
         // Pull all entries:
-
-
         for data in &users {
             // Print an item from the list.
             println!(" \n\n ID           : {:#?}. \n Customer     : {}. \n Amount Owed  : £{:#?}.", data.customer_id, data.account_name.as_ref().unwrap().replace("\r\n", ""), data.amount);
@@ -656,12 +609,10 @@ pub mod verifie_database_functions {
 
 
         ///////////////
-        // Pull all entries:
-
-
+        // Pull one chosen entry:
 
         let chosen_entry = 42;
-        // Print an item from the list.
+        // Print the chosen item from the list.
         println!(" \n Choose an entry based on row id.");
         println!(" \n\n ID           : {:#?}. \n Customer     : {}. \n Amount Owed  : £{:#?}.", 
                         &users[chosen_entry].customer_id,
@@ -672,59 +623,164 @@ pub mod verifie_database_functions {
                         &users[chosen_entry].amount);
 
 
-
-        //fn select_customer_data(entry_id: i32) -> String {
-         //   let data = users[entry_id];
-         //   let selected_data = (" \n\n ID           : {:#?}. \n Customer     : {}. \n Amount Owed  : £{:#?}.", data.customer_id, data.account_name.as_ref().unwrap().replace("\r\n", ""), data.amount);
-          //  selected_data
-        //};
-
-        //let chosen_entry = 42;
-        //let chosen_data = select_customer_data(chosen_entry);
-        //println!("Chosen data: \n {}", chosen_data);
+    }
+    // ---------------------------------------------------------------------------------------------END
 
 
 
 
-        // How to unwrap the data within Some field, as interpreted from database.
-        //let msg = Some("howdy");
-        //println!(" before unwrap : {:?}", msg);
-        // Take a reference to the contained string
-        //if let Some(ref m) = msg {
-        //    println!("{}", *m);
-        //}
 
-        // Remove the contained string, destroying the Option
-        //let unwrapped_msg = msg.unwrap_or("default message");
-        //
-        //println!("unwrapped msg : {}", unwrapped_msg)
-        //
-        // Alternative version
-        //let default_message: String = "No Data or failed to read data.".to_string();
-        //let name_of_account_holder = from_this_data.account_name.as_ref().unwrap();
+
+    pub fn my_sql_payments_account(_customer_name: &str) {
+
+        if DEBUG_MODE {
+            println!("\n DEBUG : fn my_sql_payments_account(account_name: String)");
+            println!("\n DEBUG : ------------------------------------------------");
+        }
+
+
+        // Log on to database.
+        //let pool = my_sql_login();
+        // Log on to database.
+        let pool = mysql_database::Pool::new("mysql://root:d4tabasePW@localhost:3306/verifie").unwrap();
 
 
 
-
-        // This fails on the usize error.........
-        //println!(" \n one element of one_selection: {:?} ..", one_selection["customer_id"]);
-
-
-        //for x in &one_selection {
-        //    println!("{:#?}", x);
-        //}
-
-
-        // Trying example from https://stackoverflow.com/questions/35208615/how-to-select-querys-result-to-json-in-rust-and-nickel
-        //let json_obj = serde_json::from_str(&users).unwrap();
-
-        //println!(" \n one_selection: {:?} ..",json_obj);
+        // Create structure to house data.
+        #[derive(Debug)]
+        struct Payment {
+            customer_id: i32,
+            amount: i32,
+            account_name: Option<String>
+        };
 
 
-        // Access parts of the data by indexing with square brackets.
-        //println!("\n\n Please call {:#?} at the number {:#?}", users["customer_id"], users["account_name"][0]);
+        //let users: Vec<Payment> = pool.prep_exec("SELECT customer_id, amount, account_name from payment", ());
 
+        // Select payments table from database
+
+        // Construct a MySQL command for this function.
+        let mut my_sql_command = String::from("\u{22} SELECT customer_id, amount, account_name FROM payment WHERE account_name = \u{22}");
+        my_sql_command.push_str(&_customer_name);
+        my_sql_command.push_str("\u{22}");                                  // End the string with "]
+
+        // Debug print MySQL string.
+        println!(" \n MySQL command: ** {} **", my_sql_command);
         
+        // PME users formatted as defined vector structure 'User' = results from query.
+        // customer_data becomes a variable containing vector entries in Payment. 
+        // These fields are fulfilled with the data unwrapped from the MySQL interaction.
+        let customer_data: Vec<Payment> = pool.prep_exec(my_sql_command, ())
+
+                .map(|result| { // In this closure we will map `QueryResult` to `Vec<Payment>`
+                    // `QueryResult` is iterator over `MyResult<row, err>` so first call to `map`
+                    // will map each `MyResult` to contained `row` (no proper error handling)
+                    // and second call to `map` will map each `row` to `Payment`
+                    result.map(|x| x.unwrap()).map(|row| {
+                        // ⚠️ Note that from_row will panic if you don't follow (the order of? PME) your schema
+                        let (customer_id, amount, account_name) = mysql::from_row(row);
+                        Payment {
+                            customer_id: customer_id,
+                            amount: amount,
+                            account_name: account_name,
+                        }
+                    }).collect() // Collect payments so now `QueryResult` is mapped to `Vec<Payment>`
+                }).unwrap(); // Unwrap `Vec<Payment>`
+        
+
+        ///////////////
+        // Print the chosen item.
+        println!(" \n Choose an entry based on row id.");
+        println!(" \n\n ID           : {:#?}. \n Customer     : {}. \n Amount Owed  : £{:#?}.", 
+                        &customer_data[0].customer_id,
+                        &customer_data[0].account_name
+                            .as_ref()
+                            .unwrap()
+                            .replace("\r\n", ""), 
+                        &customer_data[0].amount);
+
+
+    }
+    // ---------------------------------------------------------------------------------------------END
+
+
+
+
+
+    pub fn my_sql_payments_due_report_value(_amount: i32, _greater: bool) {
+
+        if DEBUG_MODE {
+            println!("\n DEBUG : pub fn my_sql_payments_due_report_value(_amount: i32, _greater: bool)");
+            println!("\n DEBUG : ------------------------------------------------");
+        }
+
+
+        // Log on to database.
+        //let pool = my_sql_login();
+        // Log on to database.
+        let pool = mysql_database::Pool::new("mysql://root:d4tabasePW@localhost:3306/verifie").unwrap();
+
+
+
+        // Create structure to house data.
+        #[derive(Debug)]
+        struct Payment {
+            customer_id: i32,
+            amount: i32,
+            account_name: Option<String>
+        };
+
+
+        //let users: Vec<Payment> = pool.prep_exec("SELECT customer_id, amount, account_name from payment", ());
+
+        // Select payments table from database
+
+        // Construct a MySQL command for this function.
+        let mut my_sql_command = String::from("\u{22} SELECT customer_id, amount, account_name FROM payment WHERE amount");
+        if _greater {
+            my_sql_command.push_str(" > ");
+        } else {
+            my_sql_command.push_str(" <= ");
+        }
+        my_sql_command.push_str(&_amount.to_string());
+        my_sql_command.push_str("\u{22}");                                  // End the string with "
+
+        // Debug print MySQL string.
+        println!(" \n MySQL command: ** {} **", my_sql_command);
+        
+        // PME users formatted as defined vector structure 'User' = results from query.
+        // customer_data becomes a variable containing vector entries in Payment. 
+        // These fields are fulfilled with the data unwrapped from the MySQL interaction.
+        let customer_data: Vec<Payment> = pool.prep_exec(my_sql_command, ())
+
+                .map(|result| { // In this closure we will map `QueryResult` to `Vec<Payment>`
+                    // `QueryResult` is iterator over `MyResult<row, err>` so first call to `map`
+                    // will map each `MyResult` to contained `row` (no proper error handling)
+                    // and second call to `map` will map each `row` to `Payment`
+                    result.map(|x| x.unwrap()).map(|row| {
+                        // ⚠️ Note that from_row will panic if you don't follow (the order of? PME) your schema
+                        let (customer_id, amount, account_name) = mysql::from_row(row);
+                        Payment {
+                            customer_id: customer_id,
+                            amount: amount,
+                            account_name: account_name,
+                        }
+                    }).collect() // Collect payments so now `QueryResult` is mapped to `Vec<Payment>`
+                }).unwrap(); // Unwrap `Vec<Payment>`
+        
+
+        ///////////////
+        // Print the chosen item.
+        println!(" \n Choose an entry based on row id.");
+        println!(" \n\n ID           : {:#?}. \n Customer     : {}. \n Amount Owed  : £{:#?}.", 
+                        &customer_data[0].customer_id,
+                        &customer_data[0].account_name
+                            .as_ref()
+                            .unwrap()
+                            .replace("\r\n", ""), 
+                        &customer_data[0].amount);
+
+
     }
     // ---------------------------------------------------------------------------------------------END
 
