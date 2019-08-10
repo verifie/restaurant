@@ -547,7 +547,7 @@ pub mod verifie_database_functions {
         #[derive(Debug)]
         struct Payment {
             customer_id: i32,
-            amount: i32,
+            amount: f32,
             account_name: Option<String>
         };
 
@@ -573,7 +573,7 @@ pub mod verifie_database_functions {
                 }).unwrap(); // Unwrap `Vec<Payment>`
 
 
-
+            // Print all data in the struct array
             println!("\n Database download {:#?}", &users);
 
             // Access a specific row.
@@ -653,12 +653,10 @@ pub mod verifie_database_functions {
         #[derive(Debug)]
         struct Payment {
             customer_id: i32,
-            amount: i32,
+            amount: f32,
             account_name: Option<String>
         };
 
-
-        //let users: Vec<Payment> = pool.prep_exec("SELECT customer_id, amount, account_name from payment", ());
 
         // Select payments table from database
 
@@ -670,6 +668,7 @@ pub mod verifie_database_functions {
         // Debug print MySQL string.
         println!(" \n MySQL command: ** {} **", my_sql_command);
         
+
         // PME users formatted as defined vector structure 'User' = results from query.
         // customer_data becomes a variable containing vector entries in Payment. 
         // These fields are fulfilled with the data unwrapped from the MySQL interaction.
@@ -696,21 +695,18 @@ pub mod verifie_database_functions {
         println!(" \n Choose an entry based on row id.");
         println!(" \n\n ID           : {:#?}. \n Customer     : {}. \n Amount Owed  : £{:#?}.", 
                         &customer_data[0].customer_id,
-                        &customer_data[0].account_name.as_ref().unwrap(), 
+                        &customer_data[0].account_name.as_ref().unwrap(),       // Strings are further wrapped, so we must unwrap them.
                         &customer_data[0].amount);
-
 
     }
     // ---------------------------------------------------------------------------------------------END
 
 
 
-
-
-    pub fn my_sql_payments_due_report_value(_amount: i32, _greater: bool) {
+    pub fn my_sql_payments_due_report_value(_amount: f32, _greater: bool) {
 
         if DEBUG_MODE {
-            println!("\n DEBUG : pub fn my_sql_payments_due_report_value(_amount: i32, _greater: bool)");
+            println!("\n DEBUG : pub fn my_sql_payments_due_report_value(_amount: f32, _greater: bool)");
             println!("\n DEBUG : ------------------------------------------------");
         }
 
@@ -726,7 +722,7 @@ pub mod verifie_database_functions {
         #[derive(Debug)]
         struct Payment {
             customer_id: i32,
-            amount: i32,
+            amount: f32,
             account_name: Option<String>
         };
 
