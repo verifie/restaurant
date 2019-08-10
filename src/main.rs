@@ -124,6 +124,7 @@ fn main() {
     database::verifie_database_functions::my_sql_payments_account(find_this);
 
 
+    // Find items greater than _amount if true, or less than if false.
     let _amount: f32 = 50.22;
     database::verifie_database_functions::my_sql_payments_due_report_value(_amount, true);
 
