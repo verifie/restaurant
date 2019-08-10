@@ -116,7 +116,11 @@ fn main() {
         println!(" WARNING! The database submission FAILED.");
     };
 
-    let find_this = "cake";
+    database::verifie_database_functions::my_sql_read_table_payments();
+
+
+    // Cannot make this work! but table has escape strings in it....
+    let find_this = "tom";
     database::verifie_database_functions::my_sql_payments_account(find_this);
 
 

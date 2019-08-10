@@ -416,8 +416,11 @@ pub mod verifie_database_functions {
             // Log on to database.
             let pool = mysql_database::Pool::new("mysql://root:d4tabasePW@localhost:3306/verifie").unwrap();
 
+            // Remove additional escape /r/n characters created by the input action.
+            let name_corrected = &name.replace("\r\n", "");
+
             // Pull the content together in one array with supporting formatting.
-            let my_sql_payee_content = ["INSERT INTO payment (amount, account_name) VALUES (", amount, ", \u{22}", name, "\u{22})"];
+            let my_sql_payee_content = ["INSERT INTO payment (amount, account_name) VALUES (", amount, ", \u{22}", name_corrected, "\u{22})"];
 
             // Convert the array to a correctly formatted single string.
             let mut my_sql_payee = String::from("");                    // Start a mutable string, append " to the start.  \u{22} is " character.
@@ -552,7 +555,7 @@ pub mod verifie_database_functions {
         // Select payments table from database
 
         // PME users formatted as defined vector structure 'User' = results from query.
-        let users: Vec<Payment> = pool.prep_exec("SELECT customer_id, amount, account_name from payment", ())
+        let users: Vec<Payment> = pool.prep_exec("SELECT customer_id, amount, account_name FROM payment", ())
 
                 .map(|result| { // In this closure we will map `QueryResult` to `Vec<Payment>`
                     // `QueryResult` is iterator over `MyResult<row, err>` so first call to `map`
@@ -588,7 +591,7 @@ pub mod verifie_database_functions {
 
 
         // Print an item from the list. Not unwrapped.
-        let choosen_item = 9;
+        let choosen_item = 1;
         println!(" \n\n Item row [{}] from the list contains: ** {:?} **", choosen_item, &users[choosen_item]);
 
 
@@ -604,22 +607,22 @@ pub mod verifie_database_functions {
         // Pull all entries:
         for data in &users {
             // Print an item from the list.
-            println!(" \n\n ID           : {:#?}. \n Customer     : {}. \n Amount Owed  : £{:#?}.", data.customer_id, data.account_name.as_ref().unwrap().replace("\r\n", ""), data.amount);
+            println!(" \n\n ID           : {:#?}. \n Customer     : {}. \n Amount Owed  : £{:#?}.",
+                        data.customer_id, 
+                        data.account_name.as_ref().unwrap(), 
+                        data.amount);
         }
 
 
         ///////////////
         // Pull one chosen entry:
 
-        let chosen_entry = 42;
+        let chosen_entry = 4;
         // Print the chosen item from the list.
         println!(" \n Choose an entry based on row id.");
         println!(" \n\n ID           : {:#?}. \n Customer     : {}. \n Amount Owed  : £{:#?}.", 
                         &users[chosen_entry].customer_id,
-                        &users[chosen_entry].account_name
-                            .as_ref()
-                            .unwrap()
-                            .replace("\r\n", ""), 
+                        &users[chosen_entry].account_name.as_ref().unwrap(), 
                         &users[chosen_entry].amount);
 
 
@@ -660,9 +663,9 @@ pub mod verifie_database_functions {
         // Select payments table from database
 
         // Construct a MySQL command for this function.
-        let mut my_sql_command = String::from("\u{22} SELECT customer_id, amount, account_name FROM payment WHERE account_name = '");
+        let mut my_sql_command = String::from("\u{22}SELECT customer_id, amount, account_name FROM payment WHERE account_name = \u{22}");
         my_sql_command.push_str(&_customer_name);
-        my_sql_command.push_str("'\u{22}");                                  // End the string with "]
+        my_sql_command.push_str("\u{22}");                                  // End the string with "]
 
         // Debug print MySQL string.
         println!(" \n MySQL command: ** {} **", my_sql_command);
@@ -693,10 +696,7 @@ pub mod verifie_database_functions {
         println!(" \n Choose an entry based on row id.");
         println!(" \n\n ID           : {:#?}. \n Customer     : {}. \n Amount Owed  : £{:#?}.", 
                         &customer_data[0].customer_id,
-                        &customer_data[0].account_name
-                            .as_ref()
-                            .unwrap()
-                            .replace("\r\n", ""), 
+                        &customer_data[0].account_name.as_ref().unwrap(), 
                         &customer_data[0].amount);
 
 
@@ -774,10 +774,7 @@ pub mod verifie_database_functions {
         println!(" \n Choose an entry based on row id.");
         println!(" \n\n ID           : {:#?}. \n Customer     : {}. \n Amount Owed  : £{:#?}.", 
                         &customer_data[0].customer_id,
-                        &customer_data[0].account_name
-                            .as_ref()
-                            .unwrap()
-                            .replace("\r\n", ""), 
+                        &customer_data[0].account_name.as_ref().unwrap(), 
                         &customer_data[0].amount);
 
 
