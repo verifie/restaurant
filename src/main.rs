@@ -116,7 +116,8 @@ fn main() {
         println!(" WARNING! The database submission FAILED.");
     };
 
-    database::verifie_database_functions::my_sql_read_table_payments();
+    // Dump out the entire contents of MySQL for this table.
+    //database::verifie_database_functions::my_sql_read_table_payments();
 
 
     // Cannot make this work! but table has escape strings in it....
@@ -128,6 +129,7 @@ fn main() {
     let _amount: f32 = 50.22;
     database::verifie_database_functions::my_sql_payments_due_report_value(_amount, true);
 
+    
 
     
     println!("\n -------------------------------------------------------------------------- ");

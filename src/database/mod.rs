@@ -400,7 +400,7 @@ pub mod verifie_database_functions {
     // TODO :   
     //
 
-    pub fn my_sql_insert_payee(amount: &str, name: &str) -> bool {
+    pub fn my_sql_insert_payee(mut amount: &str, mut name: &str) -> bool {
 
     // 1 - Undertake Sanitization checks on input data.
 
@@ -418,7 +418,8 @@ pub mod verifie_database_functions {
 
             // Remove additional escape /r/n characters created by the input action.
             // TODO: Find out why these are added, and check how this is handled from web form inputs.
-            let name_corrected = &name.replace("\r\n", "");
+            let name = &name.replace("\r\n", "");
+            let amount = &amount.replace("\r\n", "");
             
 
             // -------------------------------------------
@@ -435,18 +436,21 @@ pub mod verifie_database_functions {
             //      4. The first decimal place is observed.  If more than one, take the first one only.  This ensures compliance and least value fail.
             //      5. We assume the data has been sanitized and passed OK, therefore no repeat checks are required here.
 
-
+            // Print Amount
+            //if DEBUG_MODE {
+                println!("\n DEBUG : Amount check: **{:?}**", amount);
+            //}
 
 
             // Find the index position of the decimal place.
             // TODO: Check this finds the FIRST instance.
             // TODO: What happens in the case of more than one decimal place?
-            decimal_place_index = amount.find('.');                             // Find the position of the decimal place.
+            let decimal_place_index = amount.find('.').unwrap_or(amount.len());                             // Find the position of the decimal place.
             
             // Debug : Show where the decimal was found.
-            if DEBUG_MODE {
+            //if DEBUG_MODE {
                 println!("\n DEBUG : Amount check: Decimal place found at = **{:?}**", decimal_place_index);
-            }
+            //}
 
 
             // We could split it and separate pounds and pence. This would be useful if MySQL had a column for each.  But it doesn't
@@ -458,7 +462,7 @@ pub mod verifie_database_functions {
 
 
             // Pull the content together in one array with supporting formatting.
-            let my_sql_payee_content = ["INSERT INTO payment (amount, account_name) VALUES (", amount, ", \u{22}", name_corrected, "\u{22})"];
+            let my_sql_payee_content = ["INSERT INTO payment (amount, account_name) VALUES (", amount, ", \u{22}", name, "\u{22})"];
 
             // Convert the array to a correctly formatted single string.
             let mut my_sql_payee = String::from("");                    // Start a mutable string, append " to the start.  \u{22} is " character.
